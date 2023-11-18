@@ -160,12 +160,8 @@ function Landing({ navigation }: { navigation:any}) {
             <Text>
               {name}
             </Text>
-            <Text> 
-                Google Rating:
-            </Text>
-            <Text> {rating} </Text>
-            <Text> Price range: </Text>
-            <Text> {range} </Text>
+            <Text> Google Rating: {rating} </Text>
+            <Text> Price range: {range}</Text>
             <Text> {subType} </Text>
         </View>
         <Button
