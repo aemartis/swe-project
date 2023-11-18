@@ -9,6 +9,7 @@ import {
   SafeAreaView,
   Image,
 } from 'react-native';
+import dataJSON from './restaurant_data.json';
 
 function Landing({ navigation }: { navigation:any}) {
     return (
@@ -134,47 +135,41 @@ function Landing({ navigation }: { navigation:any}) {
     );
   }
   
-const restaurants = [
-  { id: "McDonalds", image: require('./McDonalds.png'), rating: ' 1/5'},
-  { id: "Qdoba", image: require('./Qdoba.png'), rating: ' 3/5'},
-  { id: "Burger King", image: require('./Burgerking.png'), rating: ' 2/5'},
-  { id: "Applebees", image: require('./Applebees.png'), rating: ' 4/5'},
-];
+  function Suggestions({ navigation }: { navigation:any}) {
 
-function Suggestions({ navigation }: { navigation:any}) {
-
-  const [logo, changeLogo] = useState( restaurants.at(0)?.image );
-  const [rating, changeRating] = useState( restaurants.at(0)?.rating )
-
-  const changeSuggestion = () => {
-    var min = 0
-    var max = 3
-    var num = Math.floor(Math.random() * (max - min + 1)) + min
-    changeLogo( restaurants.at(num)?.image )
-    changeRating( restaurants.at(num)?.rating )
-  }
-
-  return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Suggestions</Text>
-      <View>
-          <Image source={logo} />
-          <Text> 
-              Yelp Rating:
-          </Text>
-          <Text> {rating}</Text>
+    const [logo, changeLogo] = useState( dataJSON.at(1)?.logo );
+    const [rating, changeRating] = useState( dataJSON.at(1)?.rating );
+  
+    const changeSuggestion = () => {
+      var min = 1
+      var max = dataJSON.length
+      var num = Math.floor(Math.random() * (max - min + 1)) + min
+      changeLogo( dataJSON.at(num)?.logo )
+      changeRating( dataJSON.at(num)?.rating )
+    }
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <Text>Suggestions</Text>
+        <View>
+            <Image
+              resizeMode="cover"
+              source={{uri:logo}} />
+            <Text> 
+                Yelp Rating:
+            </Text>
+            <Text> {rating}</Text>
+        </View>
+        <Button
+          title="Go to Menu"
+          onPress={() => navigation.navigate('Menu')}
+        />
+        <Button
+          title="Change Suggestion"
+          onPress={changeSuggestion}
+        />
       </View>
-      <Button
-        title="Go to Menu"
-        onPress={() => navigation.navigate('Menu')}
-      />
-      <Button
-        title="Change Suggestion"
-        onPress={changeSuggestion}
-      />
-    </View>
-  );
-}
+    );
+  }
 
   function Menu({ navigation }: { navigation:any}) {
     return (
