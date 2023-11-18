@@ -137,27 +137,36 @@ function Landing({ navigation }: { navigation:any}) {
   
   function Suggestions({ navigation }: { navigation:any}) {
 
+    const [name, changeName] = useState( dataJSON.at(1)?.name );
     const [logo, changeLogo] = useState( dataJSON.at(1)?.logo );
     const [rating, changeRating] = useState( dataJSON.at(1)?.rating );
+    const [range, changeRange] = useState( dataJSON.at(1)?.range );
+    const [subType, changesubType] = useState( dataJSON.at(1)?.subtypes );
   
     const changeSuggestion = () => {
       var min = 1
       var max = dataJSON.length
       var num = Math.floor(Math.random() * (max - min + 1)) + min
+      changeName( dataJSON.at(num)?.name )
       changeLogo( dataJSON.at(num)?.logo )
       changeRating( dataJSON.at(num)?.rating )
+      changeRange( dataJSON.at(num)?.range )
+      changesubType( dataJSON.at(num)?.subtypes )
     }
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         <Text>Suggestions</Text>
         <View>
-            <Image
-              resizeMode="cover"
-              source={{uri:logo}} />
-            <Text> 
-                Yelp Rating:
+            <Text>
+              {name}
             </Text>
-            <Text> {rating}</Text>
+            <Text> 
+                Google Rating:
+            </Text>
+            <Text> {rating} </Text>
+            <Text> Price range: </Text>
+            <Text> {range} </Text>
+            <Text> {subType} </Text>
         </View>
         <Button
           title="Go to Menu"
