@@ -20,6 +20,7 @@ import {
   useColorScheme,
   View,
   Button,
+  Image,
 } from 'react-native';
 
 import {
@@ -71,9 +72,8 @@ function App(): JSX.Element {
 
   return (
     <NavigationContainer>
-        <Stack.Navigator initialRouteName="Landing">
-          <Stack.Screen name="Landing" component={Landing} />
-          <Stack.Screen name="Manage Profiles" component={ManageProfiles} />
+        <Stack.Navigator screenOptions={{headerStyle:{backgroundColor: '#eb4034'}}} initialRouteName="Landing">
+          <Stack.Screen name="Landing" options={{title: '', headerShown: false}} component={Landing} />
           <Stack.Screen name="Create Profiles" component={CreateProfiles} />
           <Stack.Screen name="Delete Profiles" component={DeleteProfiles} />
           <Stack.Screen name="Preferences" component={Preferences} />

@@ -8,21 +8,52 @@ import {
   FlatList,
   SafeAreaView,
   Image,
+  StyleSheet,
+  Pressable,
+  ScrollView,
 } from 'react-native';
 import dataJSON from './restaurant_data.json';
 
+//style={{height: '30%'}}
+//<Image style = {{ marginBottom: '1%', marginTop: '1%', marginRight: '20%', height: 325, width: 325, resizeMode: "contain" }} source ={require('./bob_is_sharp_face.png')}/>
+
 function Landing({ navigation }: { navigation:any}) {
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Home Screen</Text>
-        <Button
-          title="Manage Profiles"
-          onPress={() => navigation.navigate('Manage Profiles')}
-        />
-        <Button
-          title="Profile Landing Page"
-          onPress={() => navigation.navigate('Profile')}
-        />
+      <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+        <Image style = {{ marginBottom: '20%', marginTop: '40%', height: 150, width: 380, resizeMode: "contain" }} source ={require('./bob2.png')}/>
+        <Text style={styles.profileSelectionText}>PROFILE SELECTION</Text>
+        <View style = {styles.scrollStyle}>
+          <ScrollView fadingEdgeLength={60}>
+            <Pressable onPress={() => navigation.navigate('Profile')}>
+              <Text style = {styles.profileText}>
+                B.O.B.
+              </Text>
+            </Pressable>
+            <Text style = {styles.profileText}>
+                B.O.B.1
+              </Text>
+              <Text style = {styles.profileText}>
+                B.O.B.2
+              </Text>
+              <Text style = {styles.profileText}>
+                B.O.B.3
+              </Text>
+              <Text style = {styles.profileText}>
+                B.O.B.4
+              </Text>  
+              <Text style = {styles.profileText}>
+                B.O.B.5
+              </Text>
+              <Text style = {styles.profileText}>
+                B.O.B.6
+              </Text>                      
+          </ScrollView>          
+        </View>
+        <Pressable style = {styles.button} onPress={() => navigation.navigate('Create Profiles')}>
+          <Text style = {styles.buttonText}>
+            Create New Profile
+          </Text>
+        </Pressable >
       </View>
     );
   }
@@ -201,6 +232,61 @@ function Landing({ navigation }: { navigation:any}) {
       
     );
   }
+
+const styles = StyleSheet.create({
+  button:{
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '90%',
+    height: '8%',
+    padding: 10,
+    borderRadius: 20,
+    backgroundColor: '#eb4034',
+    marginBottom: '4%',
+    marginTop: '2%',
+  },
+  buttonText:{
+    //fontFamily:'serif',
+    alignItems: 'center',
+    justifyContent: 'center',
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 20,
+  },
+  profileText:{
+    //fontFamily:'serif',
+    alignItems: 'center',
+    alignSelf: 'center',
+    justifyContent: 'center',
+    color: 'black',
+    fontWeight: 'bold',
+    fontSize: 20,
+  },
+  scrollStyle:{
+    //alignItems: 'center',
+    //alignSelf: 'center',
+
+    //flex: 4,
+    borderWidth: 4,
+    borderRadius: 18,
+    minHeight: 150,
+    maxHeight: 150,
+    minWidth: '85%',
+
+    borderColor: '#eb4034',
+
+    marginTop: '1%',
+    marginBottom: '1%',
+  },
+  profileSelectionText:{
+    color:'black', 
+    alignItems: 'center', 
+    alignSelf: 'center',
+    fontWeight: 'bold',
+    fontSize: 20,
+    marginTop: '7%',
+  }
+})
 
   export { Landing, ManageProfiles, CreateProfiles, DeleteProfiles,
      Preferences, Profile, Options, Suggestions, Menu, Accepted };
