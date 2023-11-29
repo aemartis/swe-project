@@ -20,11 +20,11 @@ import dataJSON from './restaurant_data.json';
 function Landing({ navigation }: { navigation:any}) {
     return (
       <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-        <Image style = {{ marginBottom: '20%', marginTop: '40%', height: 150, width: 380, resizeMode: "contain" }} source ={require('./bob2.png')}/>
+        <Image style = {{ marginBottom: '20%', marginTop: '40%', height: 150, width: 380, resizeMode: "contain" }} source ={require('./images/UI/bob2.png')}/>
         <Text style={styles.profileSelectionText}>PROFILE SELECTION</Text>
         <View style = {styles.scrollStyle}>
           <ScrollView fadingEdgeLength={60}>
-            <Pressable onPress={() => navigation.navigate('Profile')}>
+            <Pressable onPress={() => navigation.navigate('Suggestions')}>
               <Text style = {styles.profileText}>
                 B.O.B.
               </Text>
@@ -79,8 +79,8 @@ function Landing({ navigation }: { navigation:any}) {
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         <Text>Create Profiles</Text>
         <Button
-          title="Profile Landing Page"
-          onPress={() => navigation.navigate('Profile')}
+          title="Get Suggestions"
+          onPress={() => navigation.navigate('Suggestions')}
         />
       </View>
     );
@@ -166,10 +166,13 @@ function Landing({ navigation }: { navigation:any}) {
     );
   }
   
+//<Text style = {styles.suggestionsButtonText}>More info please!</Text>
+//<Text style = {styles.suggestionsButtonText}>New suggestion!</Text>
+
   function Suggestions({ navigation }: { navigation:any}) {
 
     const [name, changeName] = useState( dataJSON.at(1)?.name );
-    const [logo, changeLogo] = useState( dataJSON.at(1)?.logo );
+    const [logo, changeLogo] = useState( require('./images/logos/McDonalds.png' ));
     const [rating, changeRating] = useState( dataJSON.at(1)?.rating );
     const [range, changeRange] = useState( dataJSON.at(1)?.range );
     const [subType, changesubType] = useState( dataJSON.at(1)?.subtypes );
@@ -179,35 +182,42 @@ function Landing({ navigation }: { navigation:any}) {
       var max = dataJSON.length
       var num = Math.floor(Math.random() * (max - min + 1)) + min
       changeName( dataJSON.at(num)?.name )
-      changeLogo( dataJSON.at(num)?.logo )
+      changeLogo( require('./images/logos/McDonalds.png'))
       changeRating( dataJSON.at(num)?.rating )
       changeRange( dataJSON.at(num)?.range )
       changesubType( dataJSON.at(num)?.subtypes )
     }
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Suggestions</Text>
+      <View>
         <View>
-            <Text>
-              {name}
-            </Text>
-            <Text> Google Rating: {rating} </Text>
-            <Text> Price range: {range}</Text>
-            <Text> {subType} </Text>
+            <Image source = {logo} style={{width: 300, height: 300, alignItems: 'center', alignSelf: 'center', resizeMode: "contain"}} ></Image>
+            <View style = {{maxWidth: '90%', maxHeight: '15%', minHeight: '15%', marginTop: '5%', alignSelf: 'center',}}>
+              <Text style = {styles.suggestionText} > {name} </Text>
+              <Text style = {styles.suggestionText}> Google Rating: {rating} </Text>
+              <Text style = {styles.suggestionText} > Price range: {range}</Text>
+            </View>
         </View>
-        <Button
-          title="Go to Menu"
-          onPress={() => navigation.navigate('Menu')}
-        />
-        <Button
-          title="Change Suggestion"
-          onPress={changeSuggestion}
-        />
+        <View style = {{maxWidth: '90%', maxHeight: '15%', minHeight: '15%', alignSelf: 'center',}}>
+          <Text style = {styles.subtypeText} > {subType} </Text>
+        </View>
+        <View style ={{flexDirection: "row" , marginTop: '3%', justifyContent: 'space-evenly'}}>
+          <Pressable style = {{backgroundColor: '#eb4034', padding: 10, borderRadius: 20, marginBottom: '5%'}} onPress={() => navigation.navigate('MoreInfo')}>
+            <Image style = {{ marginBottom: '1%', marginTop: '1%', height: 50, width: 150, resizeMode: "contain" }} source ={require('./images/UI/More_Info.png')}/>
+          </Pressable>
+          <Pressable style = {{backgroundColor: '#eb4034', padding: 10, borderRadius: 20, marginBottom: '5%'}} onPress={changeSuggestion}>
+            <Image style = {{ marginBottom: '1%', marginTop: '1%', height: 50, width: 150, resizeMode: "contain" }} source ={require('./images/UI/Ask_Aagin.png')}/>
+          </Pressable>
+        </View>
+        <Pressable style = {styles.preferenceButton} onPress={() => navigation.navigate('Preferences')}>
+          <Text style = {styles.buttonText}>
+            Change My Preferences
+          </Text>
+        </Pressable >
       </View>
     );
   }
 
-  function Menu({ navigation }: { navigation:any}) {
+  function MoreInfo({ navigation }: { navigation:any}) {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         <Text>Menu</Text>
@@ -244,6 +254,18 @@ const styles = StyleSheet.create({
     backgroundColor: '#eb4034',
     marginBottom: '4%',
     marginTop: '2%',
+  },
+  preferenceButton:{
+    alignItems: 'center',
+    alignSelf: 'center',
+    justifyContent: 'center',
+    width: '90%',
+    height: '8%',
+    padding: 10,
+    borderRadius: 20,
+    backgroundColor: '#eb4034',
+    marginBottom: '4%',
+    //marginTop: '2%',
   },
   buttonText:{
     //fontFamily:'serif',
@@ -285,8 +307,38 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 20,
     marginTop: '7%',
-  }
+  },
+  suggestionText:{
+    alignItems: 'center',
+    alignSelf: 'center',
+    justifyContent: 'center',
+    color: 'black',
+    fontWeight: 'bold',
+    fontSize: 20,
+  },
+  subtypeText:{
+    alignItems: 'center',
+    alignSelf: 'center',
+    justifyContent: 'center',
+    color: 'black',
+    fontWeight: 'bold',
+    fontSize: 18,
+  },
+  suggestionsButtonText:{
+    alignItems: 'center',
+    alignSelf: 'center',
+    justifyContent: 'center',
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  suggestionsButtonBackground:{
+    backgroundColor: '#eb4034',
+    padding: 10,
+    borderRadius: 20,
+    marginBottom: '5%'
+  },
 })
 
   export { Landing, ManageProfiles, CreateProfiles, DeleteProfiles,
-     Preferences, Profile, Options, Suggestions, Menu, Accepted };
+     Preferences, Profile, Options, Suggestions, MoreInfo, Accepted };

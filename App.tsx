@@ -5,7 +5,7 @@
  * @format
  */
 
-import { Landing, ManageProfiles, CreateProfiles, DeleteProfiles,Preferences, Profile, Options, Suggestions, Menu, Accepted } from './Screens';
+import { Landing, ManageProfiles, CreateProfiles, DeleteProfiles,Preferences, Profile, Options, Suggestions, Accepted, MoreInfo } from './Screens';
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
@@ -79,8 +79,11 @@ function App(): JSX.Element {
           <Stack.Screen name="Preferences" component={Preferences} />
           <Stack.Screen name="Profile" component={Profile} />
           <Stack.Screen name="Options" component={Options} />
-          <Stack.Screen name="Suggestions" component={Suggestions} />
-          <Stack.Screen name="Menu" component={Menu} />
+          <Stack.Screen name="Suggestions" component={Suggestions} options ={{
+            title: 'Suggestions',
+            headerTintColor: '#fff',
+            }} />
+          <Stack.Screen name="MoreInfo" component={MoreInfo} />
           <Stack.Screen name="Accepted" component={Accepted} />
         </Stack.Navigator>
     </NavigationContainer>
