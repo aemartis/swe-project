@@ -10,7 +10,7 @@ public class subtypes {
 
     public static void main(String[] args){
         try{
-            FileWriter writer = new FileWriter("attributes.txt");
+            FileWriter writer = new FileWriter("attributes2.json");
             BufferedReader br = new BufferedReader(new FileReader(new File("restSubtypes.txt")));
             ArrayList<String> attributes = new ArrayList<String>();
 

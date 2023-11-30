@@ -100,9 +100,14 @@ function Landing({ navigation }: { navigation:any}) {
     );
   }
 
+  type restAttribute = {
+    id: string;
+    state: boolean;
+  }
+
   function Preference(){
 
-    function onCheck(check:boolean, item:any) {
+    function onCheck(check:boolean, item:string) {
       if (check == true) {
         rejectArray.push(item)
       } else {
@@ -112,15 +117,24 @@ function Landing({ navigation }: { navigation:any}) {
           }
         }
       }
+      var updatedState:restAttribute[] = []
+      for( var j = 0; j < checkboxesState.length; j++ ){
+        var line:restAttribute = {id:checkboxesState[j].id, state:checkboxesState[j].state}
+        updatedState[j] = line
+        if( item === updatedState[j].id ){
+          updatedState[j].state = check;
+        }
+      }
+      setCheckedState( updatedState )
     }
 
     var attributeArray:string[] = []
     for (var i = 0; i < attributes.length; i++) {
-      attributeArray[i] = ""+attributes.at(i)?.[0]
+      attributeArray[i] = "" + attributes.at(i)?.[0]
     }
 
     var array1:string[] = [], array2:string[] = [], array3:string[] = []
-    for (var i = 0; i < attributeArray.length/8; i++) {
+    for (var i = 0; i < attributeArray.length; i++) {
       array1[i] = attributeArray[i]
       if (i+1 < attributeArray.length) {
         array2[i] = attributeArray[i+1]
@@ -129,6 +143,14 @@ function Landing({ navigation }: { navigation:any}) {
         array3[i] = attributeArray[i+2]
       }
     }
+
+    var checkboxesState:restAttribute[] = []
+    for (var i = 0; i < attributeArray.length; i++){
+      var line:restAttribute = {id:attributeArray[i], state:false}
+      checkboxesState[i] = line;
+    }
+
+    const [checkState, setCheckedState] = useState(checkboxesState);
 
     rejectArray = [];
 
@@ -140,9 +162,11 @@ function Landing({ navigation }: { navigation:any}) {
               renderItem={({item}: {item:any}) => 
               <BouncyCheckbox 
                   textStyle={{ textDecorationLine: "none",}} 
-                  text = {item} 
-                  onPress={(isChecked: boolean) => {
-                    onCheck(isChecked,item)
+                  text = {item}
+                  isChecked = {checkState.at(item)}
+                  disableBuiltInState
+                  onPress={(checkState: boolean) => {
+                    onCheck(checkState,item)
                   }}/> }
               />
             <FlatList
@@ -150,9 +174,10 @@ function Landing({ navigation }: { navigation:any}) {
               renderItem={({item}: {item:any}) => 
                 <BouncyCheckbox 
                     textStyle={{ textDecorationLine: "none",}} 
-                    text = {item} 
-                    onPress={(isChecked: boolean) => {
-                      onCheck(isChecked,item)
+                    text = {item}
+                    disableBuiltInState
+                    onPress={(checkState: boolean) => {
+                      onCheck(checkState,item)
                     }}/> }
               />
             <FlatList
@@ -160,9 +185,10 @@ function Landing({ navigation }: { navigation:any}) {
               renderItem={({item}: {item:any}) => 
               <BouncyCheckbox 
                   textStyle={{ textDecorationLine: "none",}} 
-                  text = {item} 
-                  onPress={(isChecked: boolean) => {
-                    onCheck(isChecked,item)
+                  text = {item}
+                  disableBuiltInState 
+                  onPress={(checkState: boolean) => {
+                    onCheck(checkState,item)
                   }}/> }
               />
           </View>
@@ -170,14 +196,11 @@ function Landing({ navigation }: { navigation:any}) {
     )
   }
   
+//<Button title="Go to Options"onPress={() => navigation.navigate('Options')}/>
+
   function Preferences({ navigation }: { navigation:any}) {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Preferences</Text>
-        <Button
-          title="Go to Options"
-          onPress={() => navigation.navigate('Options')}
-        />
         <Preference />
       </View>
     );
@@ -188,7 +211,7 @@ function Landing({ navigation }: { navigation:any}) {
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         <Text>Preferences</Text>
         <Button
-          title="Go to Preferences"
+          title="Set Filters Here"
           onPress={() => navigation.navigate('Preferences')}
         />
         <Button
@@ -211,6 +234,7 @@ function Landing({ navigation }: { navigation:any}) {
   
 //<Text style = {styles.suggestionsButtonText}>More info please!</Text>
 //<Text style = {styles.suggestionsButtonText}>New suggestion!</Text>
+
   function Suggestions({ navigation }: { navigation:any}) {
     function checkReject(subtypes:string) {
       var returnBool = false
@@ -275,7 +299,7 @@ function Landing({ navigation }: { navigation:any}) {
         </View>
         <Pressable style = {styles.preferenceButton} onPress={() => navigation.navigate('Preferences') }>
           <Text style = {styles.buttonText}>
-            Change My Preferences
+          Set Filters Here
           </Text>
         </Pressable >
       </View>
