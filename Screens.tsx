@@ -13,13 +13,12 @@ import {
   ScrollView,
 } from 'react-native';
 import dataJSON from './restaurant_data.json';
-import attributesJSON from './attributes.json'
+import attributes from "./attributes2.json"
 import {imageSource} from './imageSource';
 
 var suggestNum = 0;
 
-var rejectArray:string[];
-rejectArray = [];
+var rejectArray:string[]=[];
 
 //style={{height: '30%'}}
 //<Image style = {{ marginBottom: '1%', marginTop: '1%', marginRight: '20%', height: 325, width: 325, resizeMode: "contain" }} source ={require('./bob_is_sharp_face.png')}/>
@@ -103,34 +102,71 @@ function Landing({ navigation }: { navigation:any}) {
 
   function Preference(){
 
-    const DATA = [
-        {key: 'Vegetarian'},
-        {key: 'Dan'},
-        {key: 'Dominic'},
-        {key: 'Jackson'},
-        {key: 'James'},
-        {key: 'Joel'},
-        {key: 'John'},
-        {key: 'Jillian'},
-        {key: 'Jimmy'},
-        {key: 'Julie'},
-    ]
+    function onCheck(check:boolean, item:any) {
+      if (check == true) {
+        rejectArray.push(item)
+      } else {
+        for (var i = 0; i < rejectArray.length; i++) {
+          if (rejectArray[i].match(item)) {
+            rejectArray.splice(i, 1)
+          }
+        }
+      }
+    }
+
+    var attributeArray:string[] = []
+    for (var i = 0; i < attributes.length; i++) {
+      attributeArray[i] = ""+attributes.at(i)?.[0]
+    }
+
+    var array1:string[] = [], array2:string[] = [], array3:string[] = []
+    for (var i = 0; i < attributeArray.length/8; i++) {
+      array1[i] = attributeArray[i]
+      if (i+1 < attributeArray.length) {
+        array2[i] = attributeArray[i+1]
+      }
+      if (i+2 < attributeArray.length) {
+        array3[i] = attributeArray[i+2]
+      }
+    }
+
+    rejectArray = [];
 
     return(
-        <SafeAreaView>
+        <View>
+          <View style={styles.prefView}>
             <FlatList
-                contentContainerStyle = {{flexDirection: 'column'}}
-                numColumns={3}
-                data = {DATA}
-                renderItem={({item}: {item:any}) => 
-                    <BouncyCheckbox 
-                        textStyle={{ textDecorationLine: "none",}} 
-                        text = {item.key} 
-                        onPress={(isChecked: boolean) => {}} 
-                    /> 
-                }
-            />
-        </SafeAreaView>
+              data = {array1}
+              renderItem={({item}: {item:any}) => 
+              <BouncyCheckbox 
+                  textStyle={{ textDecorationLine: "none",}} 
+                  text = {item} 
+                  onPress={(isChecked: boolean) => {
+                    onCheck(isChecked,item)
+                  }}/> }
+              />
+            <FlatList
+              data = {array2}
+              renderItem={({item}: {item:any}) => 
+                <BouncyCheckbox 
+                    textStyle={{ textDecorationLine: "none",}} 
+                    text = {item} 
+                    onPress={(isChecked: boolean) => {
+                      onCheck(isChecked,item)
+                    }}/> }
+              />
+            <FlatList
+              data = {array3}
+              renderItem={({item}: {item:any}) => 
+              <BouncyCheckbox 
+                  textStyle={{ textDecorationLine: "none",}} 
+                  text = {item} 
+                  onPress={(isChecked: boolean) => {
+                    onCheck(isChecked,item)
+                  }}/> }
+              />
+          </View>
+        </View>
     )
   }
   
@@ -176,6 +212,16 @@ function Landing({ navigation }: { navigation:any}) {
 //<Text style = {styles.suggestionsButtonText}>More info please!</Text>
 //<Text style = {styles.suggestionsButtonText}>New suggestion!</Text>
   function Suggestions({ navigation }: { navigation:any}) {
+    function checkReject(subtypes:string) {
+      var returnBool = false
+      for (var i = 0; i < rejectArray.length; i++) {
+        if (subtypes.includes(rejectArray[i])) {
+          returnBool = true
+        }
+      }
+
+      return returnBool
+    }
 
     var picture = imageSource(suggestNum);
 
@@ -189,8 +235,16 @@ function Landing({ navigation }: { navigation:any}) {
       var min = 0
       var max = dataJSON.length
       var num = Math.floor(Math.random() * (max - min + 1)) + min
+      
+      var counter = 0
+      while (checkReject(""+dataJSON.at(num)?.subtypes ) && counter < max) {
+        num = Math.floor(Math.random() * (max - min + 1)) + min
+        counter++
+      }
+
       suggestNum = num;
       picture = imageSource(num);
+
       changeName( dataJSON.at(num)?.name )
       changeLogo( picture )
       changeRating( dataJSON.at(num)?.rating )
@@ -205,6 +259,7 @@ function Landing({ navigation }: { navigation:any}) {
               <Text style = {styles.suggestionText} >{name}</Text>
               <Text style = {styles.suggestionText}>Google Rating: {rating}</Text>
               <Text style = {styles.suggestionText} >Price range: {range}</Text>
+              <Text style = {styles.suggestionText} >Filter: {rejectArray[0]}</Text>
             </View>
         </View>
         <View style = {{maxWidth: '90%', maxHeight: '15%', minHeight: '15%', alignSelf: 'center',}}>
@@ -218,7 +273,7 @@ function Landing({ navigation }: { navigation:any}) {
             <Image style = {{ marginBottom: '1%', marginTop: '1%', height: 50, width: 150, resizeMode: "contain" }} source ={require('./images/UI/Ask_Aagin.png')}/>
           </Pressable>
         </View>
-        <Pressable style = {styles.preferenceButton} onPress={() => navigation.navigate('Preferences')}>
+        <Pressable style = {styles.preferenceButton} onPress={() => navigation.navigate('Preferences') }>
           <Text style = {styles.buttonText}>
             Change My Preferences
           </Text>
@@ -347,6 +402,12 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 20,
     marginBottom: '5%'
+  },
+  prefView:{
+    flexDirection: 'row',
+    flex: 1,
+    alignItems: 'center',
+    alignSelf: 'center',
   },
 })
 
