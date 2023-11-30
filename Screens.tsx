@@ -13,7 +13,7 @@ import {
   ScrollView,
 } from 'react-native';
 import dataJSON from './restaurant_data.json';
-import attributes from "./attributes2.json"
+import attributes from "./attributes3.json"
 import {imageSource} from './imageSource';
 
 var suggestNum = 0;
@@ -119,14 +119,14 @@ function Landing({ navigation }: { navigation:any}) {
       attributeArray[i] = ""+attributes.at(i)?.[0]
     }
 
-    var array1:string[] = [], array2:string[] = [], array3:string[] = []
-    for (var i = 0; i < attributeArray.length/8; i++) {
-      array1[i] = attributeArray[i]
+    var array1:string[] = [attributeArray[0]], array2:string[] = [attributeArray[1]], array3:string[] = [attributeArray[2]]
+    for (var i = 3; i < attributeArray.length; i+=3) {
+      array1[i-(2*(i/3))] = attributeArray[i]
       if (i+1 < attributeArray.length) {
-        array2[i] = attributeArray[i+1]
+        array2[i-(2*(i/3))] = attributeArray[i+1]
       }
       if (i+2 < attributeArray.length) {
-        array3[i] = attributeArray[i+2]
+        array3[i-(2*(i/3))] = attributeArray[i+2]
       }
     }
 
@@ -136,30 +136,42 @@ function Landing({ navigation }: { navigation:any}) {
         <View>
           <View style={styles.prefView}>
             <FlatList
+              style={styles.prefList}
               data = {array1}
               renderItem={({item}: {item:any}) => 
               <BouncyCheckbox 
-                  textStyle={{ textDecorationLine: "none",}} 
+                  style={styles.checkboxes}
+                  textContainerStyle={styles.prefTextContainer}
+                  fillColor="#eb4034"
+                  textStyle={styles.prefTextStyle} 
                   text = {item} 
                   onPress={(isChecked: boolean) => {
                     onCheck(isChecked,item)
                   }}/> }
               />
             <FlatList
+              style={styles.prefList}
               data = {array2}
               renderItem={({item}: {item:any}) => 
                 <BouncyCheckbox 
-                    textStyle={{ textDecorationLine: "none",}} 
+                    style={styles.checkboxes}
+                    textContainerStyle={styles.prefTextContainer}
+                    fillColor="#eb4034"
+                    textStyle={styles.prefTextStyle} 
                     text = {item} 
                     onPress={(isChecked: boolean) => {
                       onCheck(isChecked,item)
                     }}/> }
               />
             <FlatList
+              style={styles.prefList}
               data = {array3}
               renderItem={({item}: {item:any}) => 
               <BouncyCheckbox 
-                  textStyle={{ textDecorationLine: "none",}} 
+                  style={styles.checkboxes}
+                  textContainerStyle={styles.prefTextContainer}
+                  fillColor="#eb4034"
+                  textStyle={styles.prefTextStyle} 
                   text = {item} 
                   onPress={(isChecked: boolean) => {
                     onCheck(isChecked,item)
@@ -173,11 +185,6 @@ function Landing({ navigation }: { navigation:any}) {
   function Preferences({ navigation }: { navigation:any}) {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Preferences</Text>
-        <Button
-          title="Go to Options"
-          onPress={() => navigation.navigate('Options')}
-        />
         <Preference />
       </View>
     );
@@ -406,9 +413,25 @@ const styles = StyleSheet.create({
   prefView:{
     flexDirection: 'row',
     flex: 1,
+    padding:5,
     alignItems: 'center',
     alignSelf: 'center',
   },
+  prefList:{
+    maxWidth:'33%',
+    marginBottom: '2%',
+  },
+  checkboxes:{
+    marginBottom:12,
+    flex: 1,
+  },
+  prefTextContainer:{
+    maxWidth: '65%',
+  },
+  prefTextStyle:{
+    textDecorationLine: "none", 
+    fontWeight: 'bold',
+  }
 })
 
   export { Landing, ManageProfiles, CreateProfiles, DeleteProfiles,
