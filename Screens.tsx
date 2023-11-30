@@ -13,6 +13,13 @@ import {
   ScrollView,
 } from 'react-native';
 import dataJSON from './restaurant_data.json';
+import attributesJSON from './attributes.json'
+import {imageSource} from './imageSource';
+
+var suggestNum = 0;
+
+var rejectArray:string[];
+rejectArray = [];
 
 //style={{height: '30%'}}
 //<Image style = {{ marginBottom: '1%', marginTop: '1%', marginRight: '20%', height: 325, width: 325, resizeMode: "contain" }} source ={require('./bob_is_sharp_face.png')}/>
@@ -168,21 +175,24 @@ function Landing({ navigation }: { navigation:any}) {
   
 //<Text style = {styles.suggestionsButtonText}>More info please!</Text>
 //<Text style = {styles.suggestionsButtonText}>New suggestion!</Text>
-
   function Suggestions({ navigation }: { navigation:any}) {
 
-    const [name, changeName] = useState( dataJSON.at(1)?.name );
-    const [logo, changeLogo] = useState( require('./images/logos/McDonalds.png' ));
-    const [rating, changeRating] = useState( dataJSON.at(1)?.rating );
-    const [range, changeRange] = useState( dataJSON.at(1)?.range );
-    const [subType, changesubType] = useState( dataJSON.at(1)?.subtypes );
+    var picture = imageSource(suggestNum);
+
+    const [name, changeName] = useState( dataJSON.at(suggestNum)?.name );
+    const [logo, changeLogo] = useState( picture );
+    const [rating, changeRating] = useState( dataJSON.at(suggestNum)?.rating );
+    const [range, changeRange] = useState( dataJSON.at(suggestNum)?.range );
+    const [subType, changesubType] = useState( dataJSON.at(suggestNum)?.subtypes );
   
     const changeSuggestion = () => {
-      var min = 1
+      var min = 0
       var max = dataJSON.length
       var num = Math.floor(Math.random() * (max - min + 1)) + min
+      suggestNum = num;
+      picture = imageSource(num);
       changeName( dataJSON.at(num)?.name )
-      changeLogo( require('./images/logos/McDonalds.png'))
+      changeLogo( picture )
       changeRating( dataJSON.at(num)?.rating )
       changeRange( dataJSON.at(num)?.range )
       changesubType( dataJSON.at(num)?.subtypes )
@@ -190,15 +200,15 @@ function Landing({ navigation }: { navigation:any}) {
     return (
       <View>
         <View>
-            <Image source = {logo} style={{width: 300, height: 300, alignItems: 'center', alignSelf: 'center', resizeMode: "contain"}} ></Image>
+          <Image source = {logo} style={{width: 300, height: 300, alignItems: 'center', alignSelf: 'center', resizeMode: "contain"}} ></Image>
             <View style = {{maxWidth: '90%', maxHeight: '15%', minHeight: '15%', marginTop: '5%', alignSelf: 'center',}}>
-              <Text style = {styles.suggestionText} > {name} </Text>
-              <Text style = {styles.suggestionText}> Google Rating: {rating} </Text>
-              <Text style = {styles.suggestionText} > Price range: {range}</Text>
+              <Text style = {styles.suggestionText} >{name}</Text>
+              <Text style = {styles.suggestionText}>Google Rating: {rating}</Text>
+              <Text style = {styles.suggestionText} >Price range: {range}</Text>
             </View>
         </View>
         <View style = {{maxWidth: '90%', maxHeight: '15%', minHeight: '15%', alignSelf: 'center',}}>
-          <Text style = {styles.subtypeText} > {subType} </Text>
+          <Text style = {styles.subtypeText} >{subType}</Text>
         </View>
         <View style ={{flexDirection: "row" , marginTop: '3%', justifyContent: 'space-evenly'}}>
           <Pressable style = {{backgroundColor: '#eb4034', padding: 10, borderRadius: 20, marginBottom: '5%'}} onPress={() => navigation.navigate('MoreInfo')}>
