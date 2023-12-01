@@ -74,16 +74,13 @@ function App(): JSX.Element {
     <NavigationContainer>
         <Stack.Navigator screenOptions={{headerStyle:{backgroundColor: '#eb4034'}}} initialRouteName="Landing">
           <Stack.Screen name="Landing" options={{title: '', headerShown: false}} component={Landing} />
-          <Stack.Screen name="Create Profiles" component={CreateProfiles} />
+          <Stack.Screen name="Create Profiles" component={CreateProfiles} options={{title: 'Create Profile', headerTintColor: '#fff'}}/>
           <Stack.Screen name="Delete Profiles" component={DeleteProfiles} />
-          <Stack.Screen name="Preferences" component={Preferences} />
+          <Stack.Screen name="Preferences" component={Preferences} options={{title: 'Filters', headerTintColor: '#fff'}}/>
           <Stack.Screen name="Profile" component={Profile} />
           <Stack.Screen name="Options" component={Options} />
-          <Stack.Screen name="Suggestions" component={Suggestions} options ={{
-            title: 'Suggestions',
-            headerTintColor: '#fff',
-            }} />
-          <Stack.Screen name="MoreInfo" component={MoreInfo} />
+          <Stack.Screen name="Suggestions" component={Suggestions} options ={{title: 'Suggestions', headerTintColor: '#fff',}} />
+          <Stack.Screen name="MoreInfo" component={MoreInfo} options={{title: 'More Info', headerTintColor: '#fff'}}/>
           <Stack.Screen name="Accepted" component={Accepted} />
         </Stack.Navigator>
     </NavigationContainer>

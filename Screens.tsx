@@ -11,6 +11,7 @@ import {
   StyleSheet,
   Pressable,
   ScrollView,
+  Linking,
 } from 'react-native';
 import dataJSON from './restaurant_data.json';
 import attributes from "./attributes3.json"
@@ -264,7 +265,7 @@ function Landing({ navigation }: { navigation:any}) {
           <Image source = {logo} style={{width: 300, height: 300, alignItems: 'center', alignSelf: 'center', resizeMode: "contain"}} ></Image>
             <View style = {{maxWidth: '90%', maxHeight: '15%', minHeight: '15%', marginTop: '5%', alignSelf: 'center',}}>
               <Text style = {styles.suggestionText} >{name}</Text>
-              <Text style = {styles.suggestionText}>Google Rating: {rating}</Text>
+              <Text style = {styles.suggestionText} >Google Rating: {rating}</Text>
               <Text style = {styles.suggestionText} >Price range: {range}</Text>
               <Text style = {styles.suggestionText} >Filter: {rejectArray[0]}</Text>
             </View>
@@ -282,7 +283,7 @@ function Landing({ navigation }: { navigation:any}) {
         </View>
         <Pressable style = {styles.preferenceButton} onPress={() => navigation.navigate('Preferences') }>
           <Text style = {styles.buttonText}>
-            Change My Preferences
+            Change My Filters
           </Text>
         </Pressable >
       </View>
@@ -290,15 +291,85 @@ function Landing({ navigation }: { navigation:any}) {
   }
 
   function MoreInfo({ navigation }: { navigation:any}) {
+    const [phone, changePhone] = useState( dataJSON.at(suggestNum)?.phone );
+    const [address, changeAddress] = useState( dataJSON.at(suggestNum)?.full_address );
+    const [site, changeSite] = useState( ""+dataJSON.at(suggestNum)?.site );
+    const [hours, changeHours] = useState( ""+dataJSON.at(suggestNum)?.working_hours );
+    const [about, changeAbout] = useState( ""+dataJSON.at(suggestNum)?.about );
+
+    //Show hours
+    var dayList:string[] = hours?.split(",")
+    var days = "", daysHours = ""
+
+    for (var i = 0; i < dayList.length; i++) {
+      var temp = dayList[i].split(":")
+      days = days+temp[0].replaceAll("\"","").replaceAll("{","").trim()+":\n"
+      daysHours = daysHours+temp[1].replaceAll("\"","").replaceAll("}","").trim()+"\n"
+    }
+
+    //Show about (WIP)
+    var aboutList:string[] = about.split("}")
+    var aboutAttri:string[] = [], otherSide:string[] = []
+    var aboutInfo:string[] = []
+
+    for (var i = 0; i < aboutList.length; i++) {
+      aboutAttri[i] = ""+aboutList[i].split(": {")[0].replaceAll("{","").replaceAll("\"","").replaceAll(",","").trim()+":\n"
+      otherSide[i] = ""+aboutList[i].split(": {")[1]
+      aboutInfo[i] = ""
+    }
+
+    for (var i = 0; i < otherSide.length; i++) {
+      var temp = otherSide[i].split(",")
+        for (var j = 0; j < temp.length; j++) {
+          aboutInfo[i] = aboutInfo[i]+"\t\t"+temp[j].replaceAll("\"","").replaceAll("{","").trim()+"\n"
+        }
+      aboutInfo[i]+="\n"
+    }
+
+    var aboutString = ""
+    for (var i = 0; i < aboutAttri.length-2; i++) {
+      aboutString = aboutString+aboutAttri[i]+aboutInfo[i]
+    }
+    //aboutString = aboutString.substring(0, aboutString.length-3)
+
+    /* THIS CRASHES THE APP FOR SOME REASON, DO NOT USE RIGHT NOW
+    function openURL() {
+      return (
+        Linking.openURL(site)
+      )
+    }
+    
+    This is from inside the return
+    <Pressable onPress={() => openURL()}>
+      <Text style = {styles.infoText}>click me!</Text>
+    </Pressable>*/
+
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Menu</Text>
-        <Button
-          title="Go to Accepted"
-          onPress={() => navigation.navigate('Accepted')}
-        />
+      <View style={{ alignItems: 'center', padding: 5}}>
+        <View style={{flexDirection: 'row'}}>
+          <View style={{marginRight: 10, alignItems: 'center'}}>
+            <Text style = {styles.menuText} >Day:</Text>
+            <Text style = {styles.infoText} >{days}</Text>
+          </View>
+          <View style={{marginLeft: 10, alignItems: 'center'}}> 
+            <Text style = {styles.menuText} >Hours:</Text>
+            <Text style = {styles.infoText} >{daysHours}</Text>
+          </View>
+        </View>
+        <Text style = {styles.infoText} >Phone: {phone}</Text>
+        <Text style = {styles.menuText} >Website:</Text>
+        <View style={styles.extraInfoView}>
+          <Text style = {styles.infoText} >{site}</Text>
+        </View>
+        <Text style = {styles.menuText} >Address:</Text>
+        <View style={styles.extraInfoView}>
+          <Text style = {styles.infoText} >{address}</Text>
+        </View>
+        <Text style={styles.menuText}>About:</Text>
+        <ScrollView style={{maxHeight: '40%'}}>
+          <Text style = {styles.infoText} >{aboutString}</Text>
+        </ScrollView>
       </View>
-      
     );
   }
   
@@ -431,6 +502,27 @@ const styles = StyleSheet.create({
   prefTextStyle:{
     textDecorationLine: "none", 
     fontWeight: 'bold',
+  },
+  menuText: {
+    alignItems: 'center',
+    alignSelf: 'center',
+    justifyContent: 'center',
+    color: 'black',
+    fontWeight: 'bold',
+    fontSize: 18,
+  },
+  infoText: {
+    marginBottom: 10,
+    alignItems: 'center',
+    alignSelf: 'center',
+    justifyContent: 'center',
+    color: 'black',
+    fontWeight: 'bold',
+    fontSize: 18,
+  },
+  extraInfoView: {
+    maxHeight: 60,
+    minHeight: 60,
   }
 })
 
