@@ -6,12 +6,10 @@ import {
   View,
   Button,
   FlatList,
-  SafeAreaView,
   Image,
   StyleSheet,
   Pressable,
   ScrollView,
-  Linking,
 } from 'react-native';
 import dataJSON from './restaurant_data.json';
 import attributes from "./attributes3.json"
@@ -20,9 +18,6 @@ import {imageSource} from './imageSource';
 var suggestNum = 0;
 
 var rejectArray:string[]=[];
-
-//style={{height: '30%'}}
-//<Image style = {{ marginBottom: '1%', marginTop: '1%', marginRight: '20%', height: 325, width: 325, resizeMode: "contain" }} source ={require('./bob_is_sharp_face.png')}/>
 
 function Landing({ navigation }: { navigation:any}) {
     return (
@@ -65,38 +60,14 @@ function Landing({ navigation }: { navigation:any}) {
     );
   }
   
-  function ManageProfiles({ navigation }: { navigation:any}) {
-    return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Manage Profiles</Text>
-        <Button
-          title="Go to Create Profiles"
-          onPress={() => navigation.navigate('Create Profiles')}
-        />
-        <Button
-          title="Go to Delete Profiles"
-          onPress={() => navigation.navigate('Delete Profiles')}
-        />
-      </View>
-    );
-  }
-  
   function CreateProfiles({ navigation }: { navigation:any}) {
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <View style={styles.pageView}>
         <Text>Create Profiles</Text>
         <Button
           title="Get Suggestions"
           onPress={() => navigation.navigate('Suggestions')}
         />
-      </View>
-    );
-  }
-  
-  function DeleteProfiles({ navigation }: { navigation:any}) {
-    return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Delete Profiles</Text>
       </View>
     );
   }
@@ -185,7 +156,7 @@ function Landing({ navigation }: { navigation:any}) {
   
   function Preferences({ navigation }: { navigation:any}) {
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <View style={styles.pageView}>
         <Preference />
       </View>
     );
@@ -193,7 +164,7 @@ function Landing({ navigation }: { navigation:any}) {
   
   function Profile({ navigation }: { navigation:any}) {
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <View style={styles.pageView}>
         <Text>Preferences</Text>
         <Button
           title="Go to Preferences"
@@ -210,15 +181,13 @@ function Landing({ navigation }: { navigation:any}) {
   
   function Options({ navigation }: { navigation:any}) {
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <View style={styles.pageView}>
         <Text>Options</Text>
       </View>
       
     );
   }
   
-//<Text style = {styles.suggestionsButtonText}>More info please!</Text>
-//<Text style = {styles.suggestionsButtonText}>New suggestion!</Text>
   function Suggestions({ navigation }: { navigation:any}) {
     function checkReject(subtypes:string) {
       var returnBool = false
@@ -274,11 +243,11 @@ function Landing({ navigation }: { navigation:any}) {
           <Text style = {styles.subtypeText} >{subType}</Text>
         </View>
         <View style ={{flexDirection: "row" , marginTop: '3%', justifyContent: 'space-evenly'}}>
-          <Pressable style = {{backgroundColor: '#eb4034', padding: 10, borderRadius: 20, marginBottom: '5%'}} onPress={() => navigation.navigate('MoreInfo')}>
-            <Image style = {{ marginBottom: '1%', marginTop: '1%', height: 50, width: 150, resizeMode: "contain" }} source ={require('./images/UI/More_Info.png')}/>
+          <Pressable style = {styles.suggestPressable} onPress={() => navigation.navigate('MoreInfo')}>
+            <Image style = {styles.suggestImage} source ={require('./images/UI/More_Info.png')}/>
           </Pressable>
-          <Pressable style = {{backgroundColor: '#eb4034', padding: 10, borderRadius: 20, marginBottom: '5%'}} onPress={changeSuggestion}>
-            <Image style = {{ marginBottom: '1%', marginTop: '1%', height: 50, width: 150, resizeMode: "contain" }} source ={require('./images/UI/Ask_Aagin.png')}/>
+          <Pressable style = {styles.suggestPressable} onPress={changeSuggestion}>
+            <Image style = {styles.suggestImage} source ={require('./images/UI/Ask_Aagin.png')}/>
           </Pressable>
         </View>
         <Pressable style = {styles.preferenceButton} onPress={() => navigation.navigate('Preferences') }>
@@ -375,18 +344,35 @@ function Landing({ navigation }: { navigation:any}) {
   
   function Accepted({ navigation }: { navigation:any}) {
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <View style={styles.pageView}>
         <Text>Accepted</Text>
         <Button
           title="Back to Profile"
           onPress={() => navigation.navigate('Profile')}
         />
       </View>
-      
     );
   }
 
 const styles = StyleSheet.create({
+  suggestImage:{
+    marginBottom: '1%',
+    marginTop: '1%',
+    height: 50,
+    width: 150,
+    resizeMode: "contain"
+  },
+  suggestPressable:{
+    backgroundColor: '#eb4034',
+    padding: 10,
+    borderRadius: 20,
+    marginBottom: '5%',
+  },
+  pageView:{
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
   button:{
     alignItems: 'center',
     justifyContent: 'center',
@@ -408,10 +394,8 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: '#eb4034',
     marginBottom: '4%',
-    //marginTop: '2%',
   },
   buttonText:{
-    //fontFamily:'serif',
     alignItems: 'center',
     justifyContent: 'center',
     color: 'white',
@@ -419,7 +403,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   profileText:{
-    //fontFamily:'serif',
     alignItems: 'center',
     alignSelf: 'center',
     justifyContent: 'center',
@@ -428,10 +411,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   scrollStyle:{
-    //alignItems: 'center',
-    //alignSelf: 'center',
-
-    //flex: 4,
     borderWidth: 4,
     borderRadius: 18,
     minHeight: 150,
@@ -526,5 +505,5 @@ const styles = StyleSheet.create({
   }
 })
 
-  export { Landing, ManageProfiles, CreateProfiles, DeleteProfiles,
+  export { Landing, CreateProfiles,
      Preferences, Profile, Options, Suggestions, MoreInfo, Accepted };
